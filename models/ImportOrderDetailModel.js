@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const abstractModel = require("./AbstractModel");
+const SIZEENUM = require("../enums/Size")
 
 const importOrderDetailSchema = new mongoose.Schema({
   ...abstractModel,
@@ -9,22 +10,19 @@ const importOrderDetailSchema = new mongoose.Schema({
     min: 0,
     default: 1,
   },
-  importPrice: {
+  price: {
     type: String,
     require: true,
     min: 0,
     default: 0,
   },
-  exportPrice: {
-    
+  size: {
+    type: String,
+    enum: Object.values(SIZEENUM).map((v  ) => v),
   },
-  r_product: {
+  r_productDetail: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "product",
-  },
-  r_importOrder: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "importOrder",
+    ref: "productDetail",
   },
 });
 

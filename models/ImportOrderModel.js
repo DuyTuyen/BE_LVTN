@@ -3,9 +3,9 @@ const abstractModel = require("./AbstractModel");
 
 const importOrderSchema = new mongoose.Schema({
   ...abstractModel,
-  importDate: {
+  importedAt: {
     type: Date,
-    require: true,
+    default: Date.now
   },
   totalPrice: {
     type: String,
@@ -13,7 +13,7 @@ const importOrderSchema = new mongoose.Schema({
     min: 0,
     default: 0,
   },
-  r_importOrderDetail: [
+  r_importOrderDetails: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "importOrderDetail",

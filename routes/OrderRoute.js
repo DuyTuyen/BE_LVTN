@@ -2,27 +2,27 @@ const { Router } = require("express");
 const router = Router({ mergeParams: true });
 
 const { CustomError } = require("../errors/CustomError");
-const exportOrderService = require("../services/ExportOrderService");
-const { verifyToken } = require("../middlewares/VerifyToken");
-const { createExportOrderDto } = require("../dtos/ExportOrderDTO");
+const orderService = require("../services/OrderService");
+const { createOrderDto } = require("../dtos/OrderDTO");
 
 const { default: mongoose } = require("mongoose");
+const { verifyToken } = require("../middlewares/Auth");
 
 router
   .post("/", verifyToken, async (req, res) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-      const exportOrderDTO = createExportOrderDto(req.body);
-      if (exportOrderDTO.hasOwnProperty("errMessage"))
-        throw new CustomError(exportOrderDTO.errMessage, 400);
-      exportOrderDTO.data["r_user"] = req.user.id;
-      const createdExportOrder = await exportOrderService.create(
-        exportOrderDTO.data,
+      const orderDTO = createOrderDto(req.body);
+      if (orderDTO.hasOwnProperty("errMessage"))
+        throw new CustomError(orderDTO.errMessage, 400);
+      orderDTO.data["r_user"] = req.user.id;
+      const createdOrder = await orderService.create(
+        orderDTO.data,
         session
       );
       await session.commitTransaction();
-      res.status(201).json(createdExportOrder);
+      res.status(201).json(createdOrder);
     } catch (error) {
       console.log(error);
       await session.abortTransaction();
@@ -34,7 +34,7 @@ router
       session.endSession();
     }
   })
-  .get("/", verifyToken, (req, res) => {
+  .get("/", (req, res) => {
     try {
       return res.status(200).json();
     } catch (error) {

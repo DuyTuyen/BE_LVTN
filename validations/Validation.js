@@ -19,7 +19,7 @@ function validateNumber(input) {
 
 function validateArray(input) {
   if (
-    typeof input !== "array" ||
+    typeof input !== "object" ||
     input === null ||
     input === undefined ||
     input.length <= 0
@@ -49,14 +49,13 @@ function validateEnum(Enum, input) {
 }
 
 function validatePhone(input) {
-  const checkPhoneInput = input
-    .toLowerCase()
-    .match(/(84|0[3|5|7|8|9])+([0-9]{8})\b/g);
   if (
     typeof input !== "string" ||
     input === null ||
     input === undefined ||
-    !checkPhoneInput
+    !input
+    .toLowerCase()
+    .match(/(84|0[3|5|7|8|9])+([0-9]{8})\b/g)
   )
     return true;
   return false;
@@ -69,8 +68,8 @@ function validateDate(input) {
     input === undefined ||
     isValidDate(input)
   )
-    return false;
-  return true;
+    return true;
+  return false;
 }
 function validateObjectId(input) {
   if (ObjectId.isValid(input)) return false;

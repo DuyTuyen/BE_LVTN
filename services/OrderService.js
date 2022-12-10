@@ -1,12 +1,14 @@
-const exportOrderDetailRepo = require("../repositories/ExportOrderDetailRepo");
-const exportOrderRepo = require("../repositories/ExportOrderRepo");
+const orderDetailRepo = require("../repositories/OrderDetailRepo");
+const orderRepo = require("../repositories/OrderRepo");
 const paymentRepo = require("../repositories/PaymentRepo");
 const consignmentService = require("./ConsignmentService");
 const { CustomError } = require("../errors/CustomError");
+const { sendRequestMomo } = require("../utils/Momo");
+const PAYMENTTYPE = require("../enums/PaymentType")
 
-async function create(exportOrderDTO, session) {
+async function create(orderDTO, session) {
   try {
-    const details = exportOrderDTO.r_exportOrderDetails;
+    const details = orderDTO.r_orderDetails;
     const updatingQuantityConsignmentPromise = [];
     details.forEach((detail) => {
       updatingQuantityConsignmentPromise.push(
@@ -14,32 +16,37 @@ async function create(exportOrderDTO, session) {
           {
             r_productDetail: detail.r_productDetail,
             quantity: detail.quantity,
+            size: detail.size
           },
           session
         )
       );
     });
-    console.log(exportOrderDTO);
     await Promise.all(updatingQuantityConsignmentPromise);
-    const createdExportOrderDetails = await exportOrderDetailRepo.createMany(
+    const createdOrderDetails = await orderDetailRepo.createMany(
       details,
       session
     );
-    const createdExportOrder = await exportOrderRepo.create({
-      totalBill: exportOrderDTO.totalBill,
-      r_user: exportOrderDTO.r_user,
-      address: exportOrderDTO.address,
-      name: exportOrderDTO.name,
-      phone: exportOrderDTO.phone,
-      email: exportOrderDTO.email,
-      r_exportOrderDetails: createdExportOrderDetails,
-    });
-    await paymentRepo.create({
-      type: exportOrderDTO.paymenttype,
-      r_exportOrder: createdExportOrder[0],
-    });
-    return Promise.resolve(createdExportOrder);
+    const createdOrder = await orderRepo.create({
+      totalBill: orderDTO.totalBill,
+      address: orderDTO.address,
+      name: orderDTO.name,
+      phone: orderDTO.phone,
+      email: orderDTO.email,
+      r_orderDetails: createdOrderDetails,
+    },session);
+    const createdPayment = await paymentRepo.create({
+      type: orderDTO.paymenttype,
+      r_order: createdOrder[0],
+    },session);
+    if(orderDTO.paymentType === PAYMENTTYPE.MOMO){
+      const payUrl = await sendRequestMomo({orderId: createdOrder[0]._id.toString(), paymentId: createdPayment[0]._id.toString(), totalBill: createdOrder[0].totalBill})
+  
+      return Promise.resolve({payUrl, type: orderDTO.paymentType})
+  }
+  return Promise.resolve({type: orderDTO.paymentType, payUrl: "/order"})
   } catch (error) {
+    console.log(error)
     throw new CustomError(error.toString(), 500);
   }
 }

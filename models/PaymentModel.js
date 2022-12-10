@@ -20,9 +20,9 @@ const paymentSchema = new mongoose.Schema({
     enum: Object.values(PAYMENTTYPEENUM).map((v) => v),
     default: "inperson",
   },
-  r_exportOrder: {
+  r_order: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "exportOrder",
+    ref: "order",
   },
 });
 

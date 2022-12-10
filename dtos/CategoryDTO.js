@@ -1,29 +1,44 @@
-const { validateString } = require("../validations/Validation");
+const { validateString, validateObjectId } = require("../validations/Validation")
 function createCategoryDto(reqBody) {
-  const input = reqBody;
-  const errMessages = [];
+    const input = reqBody
+    const errMessages = []
+    if (validateString(input.name))
+        errMessages.push("trường 'name' chưa hợp lệ")
 
-  if (validateString(input.name)) errMessages.push("trường 'name' chưa hợp lệ");
-
-  if (errMessages.length > 0)
-    return {
-      errMessage: errMessages.reduce((total, err) => `${total} ${err} ---`, ""),
-    };
-  return { data: { name: input.name, img: input.img } };
+    if (errMessages.length > 0)
+        return { errMessage: errMessages.reduce((total, err) => `${total} ${err} ---`, "") }
+    return { data: { name: input.name, img: input.img } }
 }
+
 function updateCategoryDto(id, reqBody) {
-  const input = reqBody;
-  const errMessages = [];
-  if (validateString(input.name)) errMessages.push("trường 'name' chưa hợp lệ");
+    const input = reqBody
+    const errMessages = []
+    if (validateString(input.name))
+        errMessages.push("trường 'name' chưa hợp lệ")
 
-  if (validateObjectId(id)) errMessages.push("Id không hợp lệ");
+    if (validateObjectId(id))
+        errMessages.push("Id không hợp lệ")
 
-  if (errMessages.length > 0)
-    return {
-      errMessage: errMessages.reduce((total, err) => `${total} ${err}---`, ""),
-    };
+    if (errMessages.length > 0)
+        return { errMessage: errMessages.reduce((total, err) => `${total} ${err}---`, "") }
 
-  const data = { id, name: input.name };
+    const data = { id, name: input.name }
+    if (input.img !== "")
+        data['img'] = input.img
+    return { data }
 }
 
-module.exports = { createCategoryDto , updateCategoryDto};
+function deleteCategoryDto(id) {
+    const errMessages = []
+
+    if (validateObjectId(id))
+        errMessages.push("Id không hợp lệ")
+
+    if (errMessages.length > 0)
+        return { errMessage: errMessages.reduce((total, err) => `${total} ${err}---`, "") }
+
+    return { data: { id } }
+
+}
+
+module.exports = { createCategoryDto, updateCategoryDto, deleteCategoryDto }

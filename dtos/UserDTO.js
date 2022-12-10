@@ -2,10 +2,12 @@ const {
   validateString,
   validateEmail,
   validatePhone,
+  validateEnum
 } = require("../validations/Validation");
 const RoleEnum = require("../enums/Role");
 function createUserDto(reqBody) {
   const input = reqBody;
+  const errMessages = []
 
   if (validateString(input.username))
     return { errMessage: "User name invalid" };
@@ -20,7 +22,7 @@ function createUserDto(reqBody) {
     return {
       errMessage: errMessages.reduce((total, err) => `${total} ${err} ---`, ""),
     };
-
+    console.log(input)
   return {
     data: {
       username: input.username,
@@ -29,7 +31,7 @@ function createUserDto(reqBody) {
       phone: input.phone,
       address: input.address,
       email: input.email,
-      role: RoleEnum[input.role],
+      role: input.role,
     },
   };
 }

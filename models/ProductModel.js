@@ -13,6 +13,10 @@ const productSchema = new mongoose.Schema({
     min: 0,
     default: 0,
   },
+  des: {
+    type: String,
+    default: ""
+  },
   r_productDetails: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "productDetail",

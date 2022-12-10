@@ -7,4 +7,4 @@ function isValidDate(input) {
     return false
 }
 
-module.export = {isValidDate}
+module.exports = {isValidDate}

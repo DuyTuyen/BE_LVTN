@@ -1,4 +1,4 @@
-const importOrder = require("../models/ImportOrder");
+const importOrder = require("../models/ImportOrderModel");
 
 const create = ({ totalPrice, r_importOrderDetails, r_user }, session) => {
   return importOrder.create([{ totalPrice, r_importOrderDetails, r_user }], {

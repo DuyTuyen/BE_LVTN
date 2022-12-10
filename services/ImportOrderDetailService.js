@@ -4,8 +4,8 @@ function getAll() {
   return importOrderDetailRepo.getAll();
 }
 
-function create(importOrderDetailDTO, session) {
-  return importOrderDetailRepo.create(importOrderDetailDTO, session);
+function createMany(importOrderDetailDTOs, session) {
+  return importOrderDetailRepo.createMany(importOrderDetailDTOs, session);
 }
 
-module.exports = { getAll, create };
+module.exports = { getAll, createMany };

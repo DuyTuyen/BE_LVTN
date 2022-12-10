@@ -6,7 +6,7 @@ const { CustomError } = require("../errors/CustomError");
 const { createUserDto, loginUserDto } = require("../dtos/UserDTO");
 const userService = require("../services/UserService");
 const { signToken } = require("../utils/SignToken");
-const { veryfiToken } = require("../middlewares/Auth");
+const { verifyToken } = require("../middlewares/Auth");
 const { default: mongoose } = require("mongoose");
 
 router
@@ -21,7 +21,8 @@ router
       userDTO.data.password = hashPassword;
       const createduser = await userService.create(userDTO.data, session);
       await session.commitTransaction()
-      res.status(201).json(createduser);
+      const signedToken = signToken(createduser);
+      res.status(201).json({ signedToken });    
     } catch (error) {
       await session.abortTransaction();
       session.endSession();
@@ -55,7 +56,7 @@ router
       console.error(error.toString());
     }
   })
-  .get("/",veryfiToken,async (req,res)=>{
+  .get("/",verifyToken,async (req,res)=>{
     try{
         return res.status(200).json(req.user)
     }catch{

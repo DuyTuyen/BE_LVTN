@@ -1,4 +1,6 @@
-const { validateNumber } = require("../validations/Validation");
+const { validateNumber, validateObjectId, validateEnum } = require("../validations/Validation");
+const SIZEENUM  = require("../enums/Size")
+const CONSIGNMENTSTATUS = require("../enums/ConsignmentStatus")
 
 function createImportOrderDetailDto(reqBody, index) {
   const input = reqBody;
@@ -10,19 +12,27 @@ function createImportOrderDetailDto(reqBody, index) {
       `trường 'importOrderDetail.quantity' tại index ${index} chưa hợp lệ`
     );
   }
-  if (validateNumber(input.importPrice) && input.importPrice < 0) {
+  if (validateNumber(input.price) && input.price < 0) {
     errMessages.push(
-      `trường 'importOrderDetail.importPrice' tại index ${index} chưa hợp lệ`
+      `trường 'importOrderDetail.price' tại index ${index} chưa hợp lệ`
     );
   }
-  if (validateNumber(input.exportPrice) && input.exportPrice < 0) {
-    errMessages.push(
-      `trường 'importOrderDetail.exportPrice' tại index ${index} chưa hợp lệ`
-    );
-  }
-  if (validateString(input.r_productDetail)) {
+  
+  if (validateObjectId(input.r_productDetail)) {
     errMessages.push(
       `trường 'importOrderDetail.r_productDetail' tại index ${index} chưa hợp lệ`
+    );
+  }
+
+  if (validateEnum(SIZEENUM, input.size)) {
+    errMessages.push(
+      `trường 'importOrderDetail.size' tại index ${index} chưa hợp lệ`
+    );
+  }
+
+  if (validateEnum(CONSIGNMENTSTATUS, input.consignmentStatus)) {
+    errMessages.push(
+      `trường 'importOrderDetail.consignmentStatus' tại index ${index} chưa hợp lệ`
     );
   }
 
@@ -36,6 +46,8 @@ function createImportOrderDetailDto(reqBody, index) {
       quantity: input.quantity,
       price: input.price,
       r_productDetail: input.r_productDetail,
+      size: input.size,
+      consignmentStatus: input.consignmentStatus
     },
   };
 }

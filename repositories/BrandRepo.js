@@ -1,8 +1,7 @@
 const brand = require("../models/BrandModel");
 
-const create = ({ name }, session) => {
-  console.log(name);
-  return brand.create([{ name }], { session });
+const create = ({ name,img,r_categories }, session) => {
+  return brand.create([{ name,img, r_categories }], { session });
 };
 
 const getAll = () => {
@@ -24,11 +23,11 @@ const deleteOne = (id, session) => {
   );
 };
 
-const updateOne = ({ id, name }, session) => {
+const updateOne = ({ id, name ,img, r_categories}, session) => {
   return brand
     .findOneAndUpdate(
       { _id: id },
-      { name, updatedAt: new Date() },
+      { name,img,r_categories, updatedAt: new Date() },
       { new: true }
     )
     .session(session);

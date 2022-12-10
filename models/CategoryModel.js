@@ -6,6 +6,10 @@ const categorySchema = new mongoose.Schema({
   name: {
     type: String,
     required: "Trường 'name' không được bỏ trống",
+  },
+  img: {
+    type: String,
+    default: ""
   }
 });
 

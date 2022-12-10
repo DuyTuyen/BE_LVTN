@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const abstractModel = require("./AbstractModel");
+const ORDERSTATUSENUM = require("../enums/OrderStatus")
 
 const orderSchema = new mongoose.Schema({
   ...abstractModel,
@@ -7,28 +8,34 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  phoneNumber: {
+  phone: {
     type: String,
     require: true,
+    maxLength: 11
   },
   address: {
     type: String,
     require: true,
   },
+  email: {
+    type: String,
+    require: true
+  },
   totalBill: {
     type: Number,
     require: true,
     min: 0,
-    default: 0,
   },
-  payment: {
-    type: String,
-    require: true,
-  },
+  r_orderDetails: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "orderDetail",
+    },
+  ],
   status: {
     type: String,
-    enum: ["1", "2", "3", "4", "5"],
-    default: "1",
+    enum: Object.values(ORDERSTATUSENUM).map(v => v),
+    default: "new"
   },
 });
 

@@ -1,7 +1,7 @@
 const productDetail = require("../models/ProductDetailModel");
 
-const create = async ({ color, quantity, size, img, r_product }, session) => {
-  return productDetail.create([{ color, quantity, size, img, r_product }], {
+const create = async ({ color,img  }, session) => {
+  return productDetail.create([{ color,img }], {
     session,
   });
 };

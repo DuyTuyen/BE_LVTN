@@ -5,8 +5,8 @@ const {
   validatePhone,
   validateEmail,
   validateArray,
-} = require("../validation/validation");
-const { createExportOrderDetailDto } = require("./ExportOrderDetailDTO");
+} = require("../validations/Validation");
+const { createOrderDetailDto } = require("./OrderDetailDTO");
 const PAYMENTTYPEENUM = require("../enums/PaymentType");
 
 function createOrderDto(reqBody) {
@@ -31,15 +31,15 @@ function createOrderDto(reqBody) {
   if (validateEnum(PAYMENTTYPEENUM, input.paymentType))
     errMessages.push("trường 'paymentType' không hợp lệ");
 
-  if (validateArray(input.r_exportOrderDetails)) {
-    errMessages.push("array 'r_exportOrderDetails' chưa hợp lệ");
-    input.details = [];
+  if (validateArray(input.r_orderDetails)) {
+    errMessages.push("array 'r_orderDetails' chưa hợp lệ");
+    input.r_orderDetails = [];
   } else
-    input.r_exportOrderDetails.forEach((detail, index) => {
-      const exportOrderDetailDto = createExportOrderDetailDto(detail, index);
-      if (exportOrderDetailDto.hasOwnProperty("errMessage")) {
-        errMessages.push(`${exportOrderDetailDto.errMessage}`);
-      } else details.push(exportOrderDetailDto.data);
+    input.r_orderDetails.forEach((detail, index) => {
+      const orderDetailDto = createOrderDetailDto(detail, index);
+      if (orderDetailDto.hasOwnProperty("errMessage")) {
+        errMessages.push(`${orderDetailDto.errMessage}`);
+      } else details.push(orderDetailDto.data);
     });
 
   if (errMessages.length > 0)
@@ -55,7 +55,7 @@ function createOrderDto(reqBody) {
       name: input.name,
       phone: input.phone,
       email: input.email,
-      r_exportOrderDetails: details,
+      r_orderDetails: details,
       paymentType: input.paymentType,
     },
   };

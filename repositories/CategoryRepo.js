@@ -1,7 +1,7 @@
 const category = require("../models/CategoryModel");
 
-const create = ({ name },session) => {
-  return category.create([{ name }],{session});
+const create = ({ name,img },session) => {
+  return category.create([{ name ,img}],{session});
 };
 
 const getAll = () => {

@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
-function veryfiToken(req, res, next) {
-  const token = req.header["x-access-token"];
+function verifyToken(req, res, next) {
+  const token = req.headers["x-access-token"];
   if (!token) return res.status(403).json({ message: "Token is require" });
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -13,4 +13,4 @@ function veryfiToken(req, res, next) {
   }
 }
 
-module.exports = { veryfiToken };
+module.exports = { verifyToken };

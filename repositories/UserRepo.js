@@ -5,7 +5,7 @@ const create = (
   session
 ) => {
   return user.create(
-    {
+    [{
       username,
       password,
       name,
@@ -14,8 +14,8 @@ const create = (
       address,
       email,
       role,
-    },
-    session
+    }],
+    {session}
   );
 };
 const getAll = () => {

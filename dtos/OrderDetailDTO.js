@@ -1,5 +1,5 @@
-const { validateObjectId } = require("../validation/validation");
-const { validateNumber } = require("../validation/validation");
+const { validateObjectId,validateNumber, validateEnum } = require("../validations/Validation");
+const SIZEENUM = require("../enums/Size")
 
 function createOrderDetailDto(reqBody, index) {
   const input = reqBody;
@@ -20,6 +20,12 @@ function createOrderDetailDto(reqBody, index) {
     );
   }
 
+  if (validateEnum(SIZEENUM, input.size)) {
+    errMessages.push(
+      `trường 'importOrderDetail.size' tại index ${index} chưa hợp lệ`
+    );
+  }
+
   if (errMessages.length > 0)
     return {
       errMessage: errMessages.reduce((total, err) => `${total} ${err} ---`, ""),
@@ -30,6 +36,7 @@ function createOrderDetailDto(reqBody, index) {
       quantity: input.quantity,
       price: input.price,
       r_productDetail: input.r_productDetail,
+      size: input.size
     },
   };
 }

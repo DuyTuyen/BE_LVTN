@@ -1,11 +1,11 @@
 const order = require("../models/OrderModel");
 
 const create = (
-  { totalBill, r_user, address, name, phone, email, r_OrderDetails },
+  { totalBill, r_user, address, name, phone, email, r_orderDetails },
   session
 ) => {
   return order.create(
-    [{ totalBill, r_user, address, name, phone, email, r_OrderDetails }],
+    [{ totalBill, r_user, address, name, phone, email, r_orderDetails }],
     { session }
   );
 };

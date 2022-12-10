@@ -2,23 +2,15 @@ const { CustomError } = require("../errors/CustomError");
 const consignmentRepo = require("../repositories/ConsignmentRepo");
 const CONSIGNMENTSTATUS = require("../enums/ConsignmentStatus");
 
-function getAll() {
-  return consignmentRepo.getAll();
-}
-
-function create(consignmentDTO, session) {
-  return consignmentRepo.create(consignmentDTO, session);
-}
-
 function createMany(consignments, session) {
   return consignmentRepo.createMany(consignments, session);
 }
 
 async function updateConsignment(updatingConsignmentDto, session) {
-  const { r_productDetail, quantity } = updatingConsignmentDto;
+  const { size, r_productDetail, quantity } = updatingConsignmentDto;
   let myQuantity = quantity;
   const foundConsignments = await consignmentRepo.findByProductDetailId(
-    r_productDetail,
+    {r_productDetail,size},
     session
   );
   if (
@@ -47,4 +39,4 @@ async function updateConsignment(updatingConsignmentDto, session) {
   }
 }
 
-module.exports = { getAll, create, createMany, updateConsignment };
+module.exports = {createMany, updateConsignment };

@@ -8,7 +8,6 @@ async function create(productDetailDetailDTO, session){
         await productRepo.pushOneProductDetail({id: productDetailDetailDTO.r_product, r_productDetail: createdProductDetail},session)
         return Promise.resolve(createdProductDetail)
     } catch (error) {
-        (error)
         throw new CustomError(error.toString(),500)
     }
 }

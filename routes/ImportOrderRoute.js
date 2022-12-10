@@ -3,15 +3,15 @@ const router = Router({ mergeParams: true });
 
 const { CustomError } = require("../errors/CustomError");
 const importOrderService = require("../services/ImportOrderService");
-const { verifyToken } = require("../middlewares/VerifyToken");
+const { verifyToken } = require("../middlewares/Auth");
 const { createImportOrderDto } = require("../dtos/ImportOrderDTO");
 
 const { default: mongoose } = require("mongoose");
 
 router
-  .post("/", verifyToken, async (req, res) => {
+  .post("/", async (req, res) => {
     const session = await mongoose.startSession();
-
+    session.startTransaction()
     try {
       const importOrderDTO = createImportOrderDto(req.body);
       if (importOrderDTO.hasOwnProperty("errMessage"))
@@ -20,7 +20,6 @@ router
         importOrderDTO.data,
         session
       );
-
       await session.commitTransaction();
       res.status(201).json(createdImportOrder);
     } catch (error) {
