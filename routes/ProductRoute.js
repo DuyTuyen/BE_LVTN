@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router({ mergeParams: true });
 const productService = require("../services/productService");
-const { createProductDto } = require("../dtos/productDTO");
+const { createProductDto, updateProductDto } = require("../dtos/productDTO");
 const { CustomError } = require("../errors/CustomError");
 
 
@@ -28,10 +28,61 @@ router
 
       if (error instanceof CustomError)
         res.status(error.code).json({ message: error.message });
-      else res.status(500).json("Server has something wrong!!");
+      else res.status(500).json({message:"Server has something wrong!!"});
       console.error(error.toString());
     }
   })
+
+  .put("/:id", async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      const productDTO = updateProductDto({ ...req.body, id: req.params.id });
+      if (productDTO.hasOwnProperty("errMessage"))
+        throw new CustomError(productDTO.errMessage, 400);
+      const updatedproduct = await productService.update(
+        { ...productDTO.data },
+        session
+      );
+
+      await session.commitTransaction();
+      res.status(201).json(updatedproduct);
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+
+      if (error instanceof CustomError)
+        res.status(error.code).json({ message: error.message });
+      else res.status(500).json({message:"Server has something wrong!!"});
+      console.error(error.toString());
+    }
+  })
+
+  .delete("/:id", async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      const productDTO = updateProductDto({ ...req.body, id: req.params.id });
+      if (productDTO.hasOwnProperty("errMessage"))
+        throw new CustomError(productDTO.errMessage, 400);
+      await productService.deleteOne(
+        productDTO.data.id,
+        session
+      );
+
+      await session.commitTransaction();
+      res.status(201).json();
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+
+      if (error instanceof CustomError)
+        res.status(error.code).json({ message: error.message });
+      else res.status(500).json({message:"Server has something wrong!!"});
+      console.error(error.toString());
+    }
+  })
+
   .get("/", async (req, res) => {
     try {
       const products = await productService.getAll();

@@ -12,3 +12,5 @@ const abstractModel = {
     default: true,
   },
 };
+
+module.exports = abstractModel

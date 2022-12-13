@@ -1,7 +1,35 @@
 const product = require("../models/ProductModel");
 
 const create = async ({ name, price, r_category, r_brand, des }, session) => {
-  return product.create([{ name, price, r_category, r_brand, des }], { session });
+  const createdProduct = await product.create([{ name, price, r_category, r_brand, des }], { session });
+  return product.findById(createdProduct[0]._id)
+    .populate([
+      "r_brand",
+      "r_category",
+    ])
+    .session(session)
+};
+
+const update = async ({ id, name, price, r_category, r_brand, des }, session) => {
+  return product.findOneAndUpdate(
+    {_id: id},
+    { name,price,des,r_category,r_brand, updatedAt: new Date()}, 
+    { new: true }
+  )
+  .populate([
+    "r_brand",
+    "r_category",
+    "r_productDetails"
+  ])
+  .session(session)
+};
+
+const deleteOne = async (id, session) => {
+  return product.findOneAndUpdate(
+    {_id: id},
+    { active: false, updatedAt: new Date()}
+  )
+  .session(session)
 };
 
 const getAll = () => {
@@ -35,6 +63,8 @@ const pullOneProductDetail = ({ id, r_productDetail }, session) => {
 module.exports = {
   getAll,
   create,
+  update,
+  deleteOne,
   pushOneProductDetail,
   pullOneProductDetail
 };

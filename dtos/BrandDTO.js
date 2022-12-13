@@ -1,4 +1,4 @@
-const { validateString, validateObjectId, validateArray } = require("../validations/Validation")
+const { validateString, validateObjectId } = require("../validations/Validation")
 
 function createBrandDto(reqBody) {
   const input = reqBody
@@ -6,20 +6,10 @@ function createBrandDto(reqBody) {
   if (validateString(input.name))
     errMessages.push("trường 'name' chưa hợp lệ")
 
-  if (validateArray(input.r_categories)) {
-    errMessages.push("array 'categories' chưa hợp lệ");
-  }
-
-  input.r_categories.forEach((cate) => {
-    if (validateObjectId(cate)) {
-      errMessages.push(`category ${cate} chưa hợp lệ`);
-    }
-  });
-
   if (errMessages.length > 0)
     return { errMessage: errMessages.reduce((total, err) => `${total} ${err} ---`, "") }
     
-  const data = {name: input.name, r_categories: input.r_categories}
+  const data = {name: input.name}
   if(input.img !== "")
     data["img"] = input.img
 
@@ -31,17 +21,6 @@ function updateBrandDto(id, reqBody) {
   const errMessages = []
   if (input.name !== undefined && validateString(input.name))
     errMessages.push("trường 'name' chưa hợp lệ")
-  if (input.r_categories !== undefined) {
-    if (validateArray(input.r_categories)) {
-      errMessages.push("array 'categories' chưa hợp lệ");
-    }
-
-    input.r_categories.forEach((cate) => {
-      if (validateObjectId(cate)) {
-        errMessages.push(`category ${cate} chưa hợp lệ`);
-      }
-    });
-  }
 
   if (validateObjectId(id))
     errMessages.push("Id không hợp lệ")
@@ -49,7 +28,7 @@ function updateBrandDto(id, reqBody) {
   if (errMessages.length > 0)
     return { errMessage: errMessages.reduce((total, err) => `${total} ${err}---`, "") }
 
-  const data = { id, name: input.name, r_categories: input.r_categories }
+  const data = { id, name: input.name }
   if (input.img !== "")
     data['img'] = input.img
   return { data }

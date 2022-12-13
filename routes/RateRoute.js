@@ -20,7 +20,7 @@ router
       session.endSession();
       if (error instanceof CustomError)
         res.status(error.code).json({ message: error.message });
-      else res.status(500).json("Server has something wrong!!");
+      else res.status(500).json({message:"Server has something wrong!!"});
       console.error(error.toString());
     }
   })

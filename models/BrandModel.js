@@ -10,11 +10,7 @@ const brandSchema = new mongoose.Schema({
   img: {
     type: String,
     default: ""
-  },
-  r_categories: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "category"
-  }]
+  }
 });
 
 // brandSchema.plugin(mongoosePaginate);

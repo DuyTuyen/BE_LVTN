@@ -8,6 +8,14 @@ function create(productDTO,session) {
   return productRepo.create(productDTO,session)
 }
 
+function update(productDTO,session) {
+  return productRepo.update(productDTO,session)
+}
+
+function deleteOne(id,session) {
+  return productRepo.deleteOne(id,session)
+}
 
 
-module.exports = { getAll, create };
+
+module.exports = { getAll, create, update, deleteOne };
