@@ -9,14 +9,14 @@ const { default: mongoose } = require("mongoose");
 const { verifyToken } = require("../middlewares/Auth");
 
 router
-  .post("/", verifyToken, async (req, res) => {
+  .post("/", async (req, res) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
       const orderDTO = createOrderDto(req.body);
       if (orderDTO.hasOwnProperty("errMessage"))
         throw new CustomError(orderDTO.errMessage, 400);
-      orderDTO.data["r_user"] = req.user.id;
+      orderDTO.data["r_user"] = "639ae357af3a6c02acedc509";
       const createdOrder = await orderService.create(
         orderDTO.data,
         session

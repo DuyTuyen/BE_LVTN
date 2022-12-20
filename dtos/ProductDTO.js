@@ -63,4 +63,18 @@ function deleteProductDto(reqBody) {
   return { data: { id: input.id } };
 }
 
-module.exports = { createProductDto, updateProductDto, deleteProductDto };
+function getProductByIdDto(id){
+  const errMessages = [];
+  
+  if (validateObjectId(id))
+    errMessages.push("trường 'id' chưa hợp lệ");
+
+  if (errMessages.length > 0)
+    return {
+      errMessage: errMessages.reduce((total, err) => `${total} ${err} ---`, ""),
+    };
+
+  return { data: { id } };
+}
+
+module.exports = { createProductDto, updateProductDto, deleteProductDto, getProductByIdDto };

@@ -1,3 +1,5 @@
+const { default: mongoose } = require("mongoose");
+const GetProductAggregate = require("../aggregate/GetProductAggregate");
 const product = require("../models/ProductModel");
 
 const create = async ({ name, price, r_category, r_brand, des }, session) => {
@@ -33,11 +35,14 @@ const deleteOne = async (id, session) => {
 };
 
 const getAll = () => {
-  return product
-    .find({ active: true })
-    .populate("r_brand")
-    .populate("r_category")
-    .populate("r_productDetails");
+  const myAggregate = GetProductAggregate()
+  return product.aggregate(myAggregate)
+};
+
+const getProductById = (id) => {
+  const filter = {_id: mongoose.Types.ObjectId(id)}
+  const myAggregate = GetProductAggregate(filter)
+  return product.aggregate(myAggregate)
 };
 
 const pushOneProductDetail = ({ id, r_productDetail }, session) => {
@@ -62,6 +67,7 @@ const pullOneProductDetail = ({ id, r_productDetail }, session) => {
 
 module.exports = {
   getAll,
+  getProductById,
   create,
   update,
   deleteOne,

@@ -26,6 +26,10 @@ const orderSchema = new mongoose.Schema({
     require: true,
     min: 0,
   },
+  isPaid: {
+    type: Boolean,
+    default: false
+  },
   r_orderDetails: [
     {
       type: mongoose.Schema.Types.ObjectId,

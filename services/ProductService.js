@@ -4,6 +4,10 @@ function getAll() {
   return productRepo.getAll();
 }
 
+function getProductById(id) {
+  return productRepo.getProductById(id);
+}
+
 function create(productDTO,session) {
   return productRepo.create(productDTO,session)
 }
@@ -18,4 +22,4 @@ function deleteOne(id,session) {
 
 
 
-module.exports = { getAll, create, update, deleteOne };
+module.exports = { getAll, create, update, deleteOne, getProductById };
