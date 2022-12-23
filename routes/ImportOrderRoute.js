@@ -32,10 +32,12 @@ router
       console.error(error.toString());
     }
   })
-  .get("/", verifyToken, (req, res) => {
+  .get("/", async (req, res) => {
     try {
-      return res.status(200).json();
+      const foundImportOrders = await importOrderService.getAll()
+      return res.status(200).json(foundImportOrders);
     } catch (error) {
+      console.log(error)
       return res.status(500).json(error.toString());
     }
   });

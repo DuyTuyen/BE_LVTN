@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const abstractModel = require("./AbstractModel");
 const COLORENUM = require("../enums/Color")
-const SIZEENUM = require("../enums/Size")
 
 const productDetailSchema = new mongoose.Schema({
   ...abstractModel,

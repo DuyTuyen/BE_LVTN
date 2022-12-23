@@ -93,6 +93,16 @@ router
     }
   })
 
+  .get("/admin", async (req, res) => {
+    try {
+      const products = await productService.getAllAdminSide();
+      return res.status(200).json(products);
+    } catch (error) {
+      console.log(error)
+      res.status(500).json(error);
+    }
+  })
+
   .get("/:id", async (req, res) => {
     try {
       const productDTO = getProductByIdDto(req.params.id);

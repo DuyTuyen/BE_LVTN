@@ -1,7 +1,11 @@
 const productRepo = require("../repositories/ProductRepo");
 
 function getAll() {
-  return productRepo.getAll();
+  return productRepo.getAll(false);
+}
+
+function getAllAdminSide() {
+  return productRepo.getAll(true);
 }
 
 function getProductById(id) {
@@ -22,4 +26,4 @@ function deleteOne(id,session) {
 
 
 
-module.exports = { getAll, create, update, deleteOne, getProductById };
+module.exports = { getAll, create, update, deleteOne, getProductById, getAllAdminSide };

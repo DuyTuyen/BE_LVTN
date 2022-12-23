@@ -2,35 +2,35 @@ const { validateString, validateNumber } = require("../validations/Validation")
 
 function notificationMoMoDto(reqBody) {
     const input = reqBody
-    // const errMessages = []
-    // if (validateNumber(input.orderId))
-    //     errMessages.push("trường 'orderId' chưa hợp lệ")
+    const errMessages = []
+    if (validateNumber(input.orderId))
+        errMessages.push("trường 'orderId' chưa hợp lệ")
 
-    // if (validateNumber(input.requestId))
-    //     errMessages.push("trường 'requestId' chưa hợp lệ")
-    // if (validateString(input.orderInfo))
-    //     errMessages.push("trường 'orderInfo' chưa hợp lệ")
-    // if (validateNumber(input.amount))
-    //     errMessages.push("trường 'amount' chưa hợp lệ")
-    // if (validateString(input.orderType))
-    //     errMessages.push("trường 'orderType' chưa hợp lệ")
-    // if (validateNumber(input.transId))
-    //     errMessages.push("trường 'transId' chưa hợp lệ")
-    // if (validateNumber(input.resultCode))
-    //     errMessages.push("trường 'resultCode' chưa hợp lệ")
-    // if (validateString(input.message))
-    //     errMessages.push("trường 'message' chưa hợp lệ")
-    // if (validateString(input.payType))
-    //     errMessages.push("trường 'payType' chưa hợp lệ")
-    // if (validateNumber(input.responseTime))
-    //     errMessages.push("trường 'responseTime' chưa hợp lệ")
-    // if (validateString(input.extraData))
-    //     errMessages.push("trường 'extraData' chưa hợp lệ")
-    //     if (validateString(input.signature))
-    //     errMessages.push("trường 'signature' chưa hợp lệ")
+    if (validateNumber(input.requestId))
+        errMessages.push("trường 'requestId' chưa hợp lệ")
+    if (validateString(input.orderInfo))
+        errMessages.push("trường 'orderInfo' chưa hợp lệ")
+    if (validateNumber(input.amount))
+        errMessages.push("trường 'amount' chưa hợp lệ")
+    if (validateString(input.orderType))
+        errMessages.push("trường 'orderType' chưa hợp lệ")
+    if (validateNumber(input.transId))
+        errMessages.push("trường 'transId' chưa hợp lệ")
+    if (validateNumber(input.resultCode))
+        errMessages.push("trường 'resultCode' chưa hợp lệ")
+    if (validateString(input.message))
+        errMessages.push("trường 'message' chưa hợp lệ")
+    if (validateString(input.payType))
+        errMessages.push("trường 'payType' chưa hợp lệ")
+    if (validateNumber(input.responseTime))
+        errMessages.push("trường 'responseTime' chưa hợp lệ")
+    if (validateString(input.extraData))
+        errMessages.push("trường 'extraData' chưa hợp lệ")
+        if (validateString(input.signature))
+        errMessages.push("trường 'signature' chưa hợp lệ")
 
-    // if (errMessages.length > 0)
-    //     return { errMessage: errMessages.reduce((total, err) => `${total} ${err} ---`, "") }
+    if (errMessages.length > 0)
+        return { errMessage: errMessages.reduce((total, err) => `${total} ${err} ---`, "") }
 
     return {
         data: {
