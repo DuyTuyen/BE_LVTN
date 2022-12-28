@@ -34,16 +34,18 @@ const deleteOne = async (id, session) => {
     .session(session)
 };
 
-const getAll = (isAdminSide) => {
+const getAll = (isAdminSide,filter) => {
   if (isAdminSide) {
-    return product.find({})
+    return product.find(filter)
       .populate([
         "r_brand",
         "r_category",
         "r_productDetails"
       ])
   } else {
-    const myAggregate = GetProductAggregate()
+
+    const myAggregate = GetProductAggregate(filter)
+    console.log(myAggregate)
     return product.aggregate(myAggregate)
   }
 };

@@ -5,9 +5,11 @@ const {
   validatePhone,
   validateEmail,
   validateArray,
+  validateObjectId,
 } = require("../validations/Validation");
 const { createOrderDetailDto } = require("./OrderDetailDTO");
 const PAYMENTTYPEENUM = require("../enums/PaymentType");
+const ORDERSTATUSENUM = require("../enums/OrderStatus");
 
 function createOrderDto(reqBody) {
   const input = reqBody;
@@ -61,4 +63,28 @@ function createOrderDto(reqBody) {
   };
 }
 
-module.exports = { createOrderDto };
+function updateOrderDto(reqBody) {
+  const input = reqBody;
+  const errMessages = [];
+  const details = [];
+
+  if (validateEnum(ORDERSTATUSENUM, input.status))
+    errMessages.push("trường 'status' không hợp lệ");
+
+  if (validateObjectId(input.id))
+    errMessages.push("trường 'id' không hợp lệ");
+
+  if (errMessages.length > 0)
+    return {
+      errMessage: errMessages.reduce((total, err) => `${total} ${err}---`, ""),
+    };
+
+  return {
+    data: {
+      status: input.status,
+      id: input.id
+    },
+  };
+}
+
+module.exports = { createOrderDto, updateOrderDto };

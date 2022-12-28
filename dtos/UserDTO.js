@@ -2,9 +2,11 @@ const {
   validateString,
   validateEmail,
   validatePhone,
-  validateEnum
+  validateEnum,
+  validateObjectId
 } = require("../validations/Validation");
 const RoleEnum = require("../enums/Role");
+
 function createUserDto(reqBody) {
   const input = reqBody;
   const errMessages = []
@@ -74,4 +76,37 @@ function loginUserDto(reqBody) {
     },
   };
 }
-module.exports = { createUserDto, updateUserDTO, loginUserDto };
+
+function forgotPasswordUserDto(reqBody) {
+  const input = reqBody
+  const errMessages = []
+
+  if (validateEmail(input.email))
+      errMessages.push("trường 'email' chưa hợp lệ")
+  if (errMessages.length > 0)
+      return { errMessage: errMessages.reduce((total, err) => `${total} ${err} ---`, "") }
+  return {
+      data: {
+          email: input.email
+      }
+  }
+}
+
+function updateNewPasswordDto(reqBody) {
+  const input = reqBody
+  const errMessages = []
+
+  if (validateString(input.password))
+      errMessages.push("trường 'password' chưa hợp lệ")
+  if (validateObjectId(input.token))
+      errMessages.push("trường 'token' chưa hợp lệ")
+  if (errMessages.length > 0)
+      return { errMessage: errMessages.reduce((total, err) => `${total} ${err} ---`, "") }
+  return {
+      data: {
+          password: input.password,
+          token: input.token
+      }
+  }
+}
+module.exports = { createUserDto, updateUserDTO, loginUserDto, forgotPasswordUserDto, updateNewPasswordDto };

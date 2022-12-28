@@ -1,19 +1,18 @@
 const rateRepo = require("../repositories/RateRepo");
+const orderRepo = require("../repositories/OrderRepo")
 
-function getAll() {
-  return rateRepo.getAll();
+function getByProductId(id) {
+  return rateRepo.getByProductId(id);
 }
 
-function getByName(name) {
-  return rateRepo.getByName(name);
+async function create(rateDTO,session) {
+  try {
+    await orderRepo.updateStatus({id: rateDTO.r_order, isRated: true},session)
+    await rateRepo.create(rateDTO,session);
+    return Promise.resolve()
+  } catch (error) {
+    throw new CustomError(error.toString(), 500);
+  }
 }
 
-function getById(id) {
-  return rateRepo.getById(id);
-}
-
-function create(rateDTO,session) {
-  return rateRepo.create(rateDTO,session);
-}
-
-module.exports = { getAll, create, getById, getByName };
+module.exports = { create, getByProductId };

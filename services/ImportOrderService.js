@@ -41,7 +41,7 @@ async function create(importOrderDTO, session) {
       },
       session
     );
-    return Promise.resolve(createdImportOrder);
+    return Promise.resolve(createdImportOrder[0]);
   } catch (error) {
     throw new CustomError(error.toString(), 500);
   }

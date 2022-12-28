@@ -13,9 +13,13 @@ const rateSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
-  r_product: {
+  r_products: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "product",
+  }],
+  r_order: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "order",
   },
 });
 

@@ -1,4 +1,7 @@
-const { validateString, validateNumber, validateObjectId } = require("../validations/Validation");
+const { default: mongoose } = require("mongoose");
+const { validateString, validateNumber, validateObjectId, validateArray, validateEnum } = require("../validations/Validation");
+const SIZEENUM = require("../enums/Size")
+const COLORENUM = require("../enums/Color")
 
 function createProductDto(reqBody) {
   const input = reqBody;
@@ -51,7 +54,7 @@ function updateProductDto(reqBody) {
 function deleteProductDto(reqBody) {
   const input = reqBody;
   const errMessages = [];
-  
+
   if (validateObjectId(input.id))
     errMessages.push("trường 'id' chưa hợp lệ");
 
@@ -63,9 +66,9 @@ function deleteProductDto(reqBody) {
   return { data: { id: input.id } };
 }
 
-function getProductByIdDto(id){
+function getProductByIdDto(id) {
   const errMessages = [];
-  
+
   if (validateObjectId(id))
     errMessages.push("trường 'id' chưa hợp lệ");
 
@@ -77,4 +80,61 @@ function getProductByIdDto(id){
   return { data: { id } };
 }
 
-module.exports = { createProductDto, updateProductDto, deleteProductDto, getProductByIdDto };
+function productFilterDto(filter) {
+  const myFilter = {}
+  Object.entries(filter).forEach(([key, value]) => {
+    switch (key) {
+      case "r_category":
+        if(!validateObjectId(value)){
+          myFilter["r_category._id"] = mongoose.Types.ObjectId(value)
+        }
+        break
+      case "name":
+        if (!validateString(value)) {
+          const queryName = value.trim()
+          const queryNameArr = queryName.split(' ').map(word => ({
+            'name': { $regex: `.*${word}.*`, $options: 'si' }
+          }))
+          myFilter['$or'] = [
+            { 'name': { $regex: `.*${queryName}.*`, $options: 'si' } },
+            { $and: queryNameArr }
+          ]
+        }
+        break;
+      case "r_brand":
+        if (!validateArray(value))
+          myFilter['r_brand.name'] = {
+            $in: value.reduce((arr, v) => {
+              if (!validateString(v))
+                return [...arr, v]
+              return arr
+            }, [])
+          }
+        break
+      case "color":
+        if (!validateArray(value))
+          myFilter['r_productDetails.color'] = {
+            $in: value.reduce((arr, v) => {
+              if (!validateEnum(COLORENUM, v))
+                return [...arr, v]
+              return arr
+            },[])
+          }
+        break
+      case "size":
+        if (!validateArray(value))
+          myFilter['r_productDetails.r_consignments.size'] = {
+            $in: value.reduce((arr, v) => {
+              if (!validateEnum(SIZEENUM, v))
+                return [...arr, v]
+              return arr
+            },[])
+          }
+        break
+    }
+  })
+  console.log(myFilter)
+  return myFilter
+}
+
+module.exports = { createProductDto, updateProductDto, deleteProductDto, getProductByIdDto, productFilterDto };

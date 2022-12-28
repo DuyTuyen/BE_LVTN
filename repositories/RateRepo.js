@@ -1,27 +1,14 @@
-const rate = require("../models/CategoryModel");
+const rate = require("../models/RateModel");
 
-const create = ({ comment, star}) => {
-  return rate.create({ comment, star });
+const create = ({ comment, star, r_products, r_user},session) => {
+  return rate.create([{ comment, star, r_products, r_user }],{session});
 };
 
-const getAll = () => {
-  return rate.find({ active: true });
+const getByProductId = (productId) => {
+  return rate.find({r_products: productId, active: true }).populate({
+    path: "r_user",
+    select: "name"
+  });
 };
 
-// const getWithPagination = (paginationOption) => {
-//     return rate.paginate({active:true},paginationOption)
-// }
-
-const getById = (id) => {
-  return rate.findOne({ id });
-};
-
-const deleteOne = (id) => {
-  return rate.findOneAndUpdate({ _id: id }, { active: false });
-};
-
-const updateOne = (id, { name, img }) => {
-  return rate.findOneAndUpdate({ _id: id }, { name, img }, { new: true });
-};
-
-module.exports = { create, getById, getAll, deleteOne, updateOne };
+module.exports = { create, getByProductId };

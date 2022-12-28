@@ -18,7 +18,7 @@ const paymentSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: Object.values(PAYMENTTYPEENUM).map((v) => v),
-    default: "inperson",
+    default: "in_person",
   },
   r_order: {
     type: mongoose.Schema.Types.ObjectId,

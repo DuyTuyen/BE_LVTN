@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router({ mergeParams: true });
 const productService = require("../services/productService");
-const { createProductDto, updateProductDto, getProductByIdDto } = require("../dtos/productDTO");
+const { createProductDto, updateProductDto, getProductByIdDto, productFilterDto } = require("../dtos/productDTO");
 const { CustomError } = require("../errors/CustomError");
 
 
@@ -85,7 +85,8 @@ router
 
   .get("/", async (req, res) => {
     try {
-      const products = await productService.getAll();
+      const filter = productFilterDto(req.query)
+      const products = await productService.getAll(filter);
       return res.status(200).json(products);
     } catch (error) {
       console.log(error)
@@ -95,7 +96,8 @@ router
 
   .get("/admin", async (req, res) => {
     try {
-      const products = await productService.getAllAdminSide();
+      const filter = productFilterDto(req.query)
+      const products = await productService.getAllAdminSide(filter);
       return res.status(200).json(products);
     } catch (error) {
       console.log(error)

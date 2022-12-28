@@ -21,12 +21,20 @@ const orderSchema = new mongoose.Schema({
     type: String,
     require: true
   },
+  r_user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+  },
   totalBill: {
     type: Number,
     require: true,
     min: 0,
   },
   isPaid: {
+    type: Boolean,
+    default: false
+  },
+  isRated: {
     type: Boolean,
     default: false
   },

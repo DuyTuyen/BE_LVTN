@@ -10,7 +10,7 @@ async function updateConsignment(updatingConsignmentDto, session) {
   const { size, r_productDetail, quantity } = updatingConsignmentDto;
   let myQuantity = quantity;
   const foundConsignments = await consignmentRepo.findByProductDetailId(
-    {r_productDetail,size},
+    { r_productDetail, size },
     session
   );
   if (
@@ -39,4 +39,4 @@ async function updateConsignment(updatingConsignmentDto, session) {
   }
 }
 
-module.exports = {createMany, updateConsignment };
+module.exports = { createMany, updateConsignment };

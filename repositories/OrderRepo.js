@@ -1,3 +1,5 @@
+const { default: mongoose } = require("mongoose");
+const GetOrderAggregate = require("../aggregate/GetOrderAggregate");
 const order = require("../models/OrderModel");
 
 const create = (
@@ -10,13 +12,31 @@ const create = (
   );
 };
 
-const updateStatus = ({ id, status, isPaid }, session) => {
-  return order
+const updateStatus = async ({ id, status, isPaid, isRated }, session) => {
+  await order
     .findOneAndUpdate(
       { _id: id },
-      { status, isPaid, updatedAt: new Date() },
-      { new: true }
+      { status, isPaid, isRated, updatedAt: new Date() },
+      {new: true}
     )
     .session(session);
-};
-module.exports = { create, updateStatus };
+  const myAggregate = GetOrderAggregate({_id: mongoose.Types.ObjectId(id)})
+  return order.aggregate(myAggregate).session(session)
+}
+
+const getAll = () => {
+  const myAggregate = GetOrderAggregate()
+  return order.aggregate(myAggregate)
+}
+
+const getByUserId = (id) => {
+  const filter = { r_user: mongoose.Types.ObjectId(id) }
+  const myAggregate = GetOrderAggregate(filter)
+  return order.aggregate(myAggregate)
+}
+
+const getById = (id,session) => {
+  return order.findById(id).session(session)
+}
+
+module.exports = { getAll, create, updateStatus, getByUserId, getById }
