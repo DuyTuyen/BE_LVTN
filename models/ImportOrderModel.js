@@ -8,7 +8,7 @@ const importOrderSchema = new mongoose.Schema({
     default: Date.now
   },
   totalPrice: {
-    type: String,
+    type: Number,
     require: true,
     min: 0,
     default: 0,

@@ -69,7 +69,7 @@ router
         });
         // send mail with defined transport object
         await transporter.sendMail({
-          from: '"Lão tôn 👻" <phamanhtuan9a531@gmail.com>', // sender address
+          from: '"Lão tôn 👻', // sender address
           to: userDTO.data.email, // list of receivers
           subject: "Lấy lại mật khẩu", // Subject line
           html: `<h1>nhấn vào đường dẫn sau để tạo lại mật khẩu mới <a href="${process.env.UPDATE_NEW_PASSWORD_URL}/${createdForgotPassword[0]._id}">click here</a>`, // html body

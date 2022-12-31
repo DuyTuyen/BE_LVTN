@@ -7,5 +7,4 @@ const createMany = (creatingDetails, session) => {
 const getAll = () => {
   return importOrderDetail.find({ active: true });
 };
-
 module.exports = {  getAll, createMany };

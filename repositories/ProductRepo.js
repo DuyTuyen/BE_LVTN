@@ -60,7 +60,7 @@ const pushOneProductDetail = ({ id, r_productDetail }, session) => {
   return product
     .findOneAndUpdate(
       { _id: id },
-      { $push: { r_productDetails: r_productDetail, updatedAt: new Date() } },
+      { $push: { r_productDetails: r_productDetail } },
       { new: true }
     )
     .session(session);

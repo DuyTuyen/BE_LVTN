@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const GetOrderAggregate = require("../aggregate/GetOrderAggregate");
+const GetTopSoldProductsAggregate = require("../aggregate/GetTopSoldProductsAggregate");
 const order = require("../models/OrderModel");
 
 const create = (
@@ -36,7 +37,14 @@ const getByUserId = (id) => {
 }
 
 const getById = (id,session) => {
-  return order.findById(id).session(session)
+  const filter = { _id: mongoose.Types.ObjectId(id) }
+  const myAggregate = GetOrderAggregate(filter)
+  return order.aggregate(myAggregate).session(session)
 }
 
-module.exports = { getAll, create, updateStatus, getByUserId, getById }
+const getByMonth = (month) => {
+  const myAggregate = GetTopSoldProductsAggregate()
+  return order.aggregate(myAggregate)
+}
+
+module.exports = { getAll, create, updateStatus, getByUserId, getById,getByMonth }

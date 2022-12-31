@@ -66,31 +66,38 @@ function getByUserId(id) {
 
 async function updateStatus(orderDTO, session) {
   try {
-    const updatedOrder = await orderRepo.updateStatus(orderDTO,session)
-
-    if (orderDTO.status === ORDERSTATUS.FALIED) {
-      const foundNoti = await notificationRepo.getByOrderIdAndType({ r_order: updatedOrder[0]._id, type: NOTIFICATIONTYPE.FAILED_ORDER })
-      if (!foundNoti)
-        await notificationRepo.create({
-          content: NOTIFICATIONCONTENT.FAILED_ORDER,
-          type: NOTIFICATIONTYPE.FAILED_ORDER,
-          r_order: updatedOrder[0]._id
-        }, session)
+    const foundOrder = await orderRepo.getById(orderDTO.id, session)
+    const tempFoundOrder = foundOrder[0]
+    let updatedOrder = null
+    if ([ORDERSTATUS.NEW, ORDERSTATUS.SHIPPING].includes(tempFoundOrder.status) && orderDTO.status === ORDERSTATUS.FALIED) {
+      updatedOrder = await orderRepo.updateStatus(orderDTO,session)
+      await notificationRepo.create({
+        content: NOTIFICATIONCONTENT.FAILED_ORDER,
+        type: NOTIFICATIONTYPE.FAILED_ORDER,
+        r_order: tempFoundOrder._id
+      }, session)
     }
 
-    if (orderDTO.status === ORDERSTATUS.SHIPPING) {
-      const foundNoti = await notificationRepo.getByOrderIdAndType({ r_order: updatedOrder[0]._id, type: NOTIFICATIONTYPE.SHIPPING_ORDER })
-      if (!foundNoti)
-        await notificationRepo.create({
-          content: NOTIFICATIONCONTENT.SHIPPING_ORDER,
-          type: NOTIFICATIONTYPE.SHIPPING_ORDER,
-          r_order: updatedOrder[0]._id
-        }, session)
+    else if (ORDERSTATUS.NEW === tempFoundOrder.status && orderDTO.status === ORDERSTATUS.SHIPPING) {
+      updatedOrder = await orderRepo.updateStatus(orderDTO,session)
+      await notificationRepo.create({
+        content: NOTIFICATIONCONTENT.SHIPPING_ORDER,
+        type: NOTIFICATIONTYPE.SHIPPING_ORDER,
+        r_order: tempFoundOrder._id
+      }, session)
+    }
+
+    else if (ORDERSTATUS.SHIPPING === tempFoundOrder.status && orderDTO.status === ORDERSTATUS.SUCCESS) {
+      updatedOrder = await orderRepo.updateStatus(orderDTO,session)
+      await notificationRepo.create({
+        content: NOTIFICATIONCONTENT.SUCCESS_ORDER,
+        type: NOTIFICATIONTYPE.SUCCESS_ORDER,
+        r_order: tempFoundOrder._id
+      }, session)
     }
 
     return Promise.resolve(updatedOrder[0])
   } catch (error) {
-    console.log(error)
     throw new CustomError(error.toString(), 500);
   }
 }

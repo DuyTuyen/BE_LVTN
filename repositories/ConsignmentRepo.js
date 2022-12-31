@@ -1,5 +1,6 @@
 const consignment = require("../models/ConsignmentModel");
-const CONSIGNMENTSTATUS = require("../enums/ConsignmentStatus") 
+const CONSIGNMENTSTATUS = require("../enums/ConsignmentStatus"); 
+const GetStockProductAggregate = require("../aggregate/GetStockProductAggregate");
 
 const createMany = (creatingConsignments, session) => {
   return consignment.insertMany(creatingConsignments, { session });
@@ -14,4 +15,9 @@ const findByProductDetailId = ({r_productDetail,size}, session) => {
     .session(session);
 };
 
-module.exports = { getAll, findByProductDetailId, createMany };
+const groupByProduct = () => {
+  const myAggregate = GetStockProductAggregate()
+  return consignment.aggregate(myAggregate)
+}
+
+module.exports = { getAll, findByProductDetailId, createMany, groupByProduct };

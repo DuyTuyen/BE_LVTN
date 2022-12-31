@@ -10,6 +10,7 @@ const { router: productDetailRouter } = require("./ProductDetailRoute");
 const { router: importOrderRouter } = require("./ImportOrderRoute");
 const { router: orderRouter } = require("./OrderRoute");
 const { router: momoRouter } = require("./MomoRoute");
+const { router: statisticRouter } = require("./StatictisRoute");
 
 router.use("/category", categoryRouter);
 router.use("/brand", brandRouter);
@@ -20,5 +21,6 @@ router.use("/productdetail", productDetailRouter);
 router.use("/importorder", importOrderRouter);
 router.use("/order", orderRouter);
 router.use("/momo", momoRouter);
+router.use("/statistic", statisticRouter);
 
 module.exports = router;
