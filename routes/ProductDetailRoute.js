@@ -64,13 +64,6 @@ router
       else res.status(500).json({ message: "Server has something wrong!!" });
     }
   })
-  .get("/", async (req, res) => {
-    try {
-      const productDetails = await productDetailService.getAll();
-      return res.status(200).json(productDetails);
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  });
+
 
 module.exports = { router };

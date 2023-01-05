@@ -1,4 +1,5 @@
 const { default: mongoose } = require("mongoose");
+const GetProductAdminAggregate = require("../aggregate/GetProductAdminAggregate");
 const GetProductAggregate = require("../aggregate/GetProductAggregate");
 const product = require("../models/ProductModel");
 
@@ -34,18 +35,12 @@ const deleteOne = async (id, session) => {
     .session(session)
 };
 
-const getAll = (isAdminSide,filter) => {
+const getAll = (isAdminSide, filter) => {
   if (isAdminSide) {
-    return product.find(filter)
-      .populate([
-        "r_brand",
-        "r_category",
-        "r_productDetails"
-      ])
+    const myAggregate = GetProductAdminAggregate(filter)
+    return product.aggregate(myAggregate)
   } else {
-
     const myAggregate = GetProductAggregate(filter)
-    console.log(myAggregate)
     return product.aggregate(myAggregate)
   }
 };

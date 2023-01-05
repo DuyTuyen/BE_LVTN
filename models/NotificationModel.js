@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const abstractModel = require('./AbstractModel')
-const NOTIFICATIONSTATUS = require("../enums/NotificationType")
+const NOTIFICATIONTYPE = require("../enums/NotificationType")
 
 const notificationSchema = new mongoose.Schema({
     ...abstractModel,
@@ -8,13 +8,9 @@ const notificationSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    content: {
-        type: String,
-        require: true
-    },
     type: {
         type: String,
-        enum: Object.values(NOTIFICATIONSTATUS).map(v => v),
+        enum: Object.values(NOTIFICATIONTYPE).map(v => v),
         default: 'other'
     },
     r_consignment: {

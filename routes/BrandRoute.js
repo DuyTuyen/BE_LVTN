@@ -4,7 +4,8 @@ const brandService = require("../services/BrandService");
 const { createBrandDto, updateBrandDto } = require("../dtos/BrandDTO");
 const { CustomError } = require("../errors/CustomError");
 const { default: mongoose } = require("mongoose");
-const { uploadFile } = require("../middlewares/UploadFile")
+const { uploadFile } = require("../middlewares/UploadFile");
+const { verifyByRole, verifyToken, verifyByPermission } = require("../middlewares/Auth");
 
 router
   .post("/", uploadFile, async (req, res) => {
@@ -62,7 +63,7 @@ router
 
   })
 
-  .get("/", async (req, res) => {
+  .get("/",async (req, res) => {
     try {
       const brands = await brandService.getAll()
       return res.status(200).json(brands)

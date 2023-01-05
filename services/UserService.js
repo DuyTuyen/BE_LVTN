@@ -21,8 +21,13 @@ function getByEmail(email) {
   return userRepo.getByEmail(email)
 }
 
-async function login(userDTO) {
-  const foundUser = await getByUsername(userDTO.username);
+async function login(isAdminSide, userDTO) {
+  let foundUser = null
+  if(!isAdminSide)
+    foundUser = await userRepo.getByUsername(userDTO.username);
+  else 
+    foundUser = await userRepo.getByUsernameAdmin(userDTO.username)
+  console.log(isAdminSide, userDTO)
   if (!foundUser) throw new CustomError("user không tồn tại", 400);
   const isSamePassword = await bcrypt.compareSync(
     userDTO.password,

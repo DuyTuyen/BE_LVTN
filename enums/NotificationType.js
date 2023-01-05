@@ -3,7 +3,6 @@ module.exports = Object.freeze({
     FAILED_ORDER: 'failed_order',
     SHIPPING_ORDER: 'shipping_order',
     SUCCESS_ORDER: 'success_order',
-    OTHER: 'other'
 })
 
 

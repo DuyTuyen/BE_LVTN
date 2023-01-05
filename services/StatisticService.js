@@ -13,14 +13,14 @@ async function getRevenue() {
 
         const foundOrders = await orderRepo.getAll();
         const foundImportOrders = await importOrderRepo.getAll()
-    
+
         foundOrders.forEach(order => {
             const { month, year } = getMonthAndYear(order.createdAt)
             const nowYear = getNowYear()
-    
+          
             if (year !== nowYear){
-                revenue.thepast += order.totalBill
-                gap.thepast += order.totalBill
+                revenue.InThePast += order.totalBill
+                gap.InThePast += order.totalBill
             }
             else {
                 revenue[month] += order.totalBill
@@ -33,8 +33,8 @@ async function getRevenue() {
             const nowYear = getNowYear()
     
             if (year !== nowYear){
-                costPrice.thepast += order.totalPrice
-                gap.thepast -= order.totalPrice
+                costPrice.InThePast += order.totalPrice
+                gap.InThePast -= order.totalPrice
             }
             else {
                 costPrice[month] += order.totalPrice

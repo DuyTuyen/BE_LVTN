@@ -6,7 +6,6 @@ const consignmentService = require("./ConsignmentService");
 const { CustomError } = require("../errors/CustomError");
 const { sendRequestMomo } = require("../utils/Momo");
 const PAYMENTTYPE = require("../enums/PaymentType");
-const NOTIFICATIONCONTENT = require("../enums/NotificationContent");
 const NOTIFICATIONTYPE = require("../enums/NotificationType");
 const ORDERSTATUS = require("../enums/OrderStatus");
 
@@ -72,7 +71,7 @@ async function updateStatus(orderDTO, session) {
     if ([ORDERSTATUS.NEW, ORDERSTATUS.SHIPPING].includes(tempFoundOrder.status) && orderDTO.status === ORDERSTATUS.FALIED) {
       updatedOrder = await orderRepo.updateStatus(orderDTO,session)
       await notificationRepo.create({
-        content: NOTIFICATIONCONTENT.FAILED_ORDER,
+        
         type: NOTIFICATIONTYPE.FAILED_ORDER,
         r_order: tempFoundOrder._id
       }, session)
@@ -81,7 +80,7 @@ async function updateStatus(orderDTO, session) {
     else if (ORDERSTATUS.NEW === tempFoundOrder.status && orderDTO.status === ORDERSTATUS.SHIPPING) {
       updatedOrder = await orderRepo.updateStatus(orderDTO,session)
       await notificationRepo.create({
-        content: NOTIFICATIONCONTENT.SHIPPING_ORDER,
+        
         type: NOTIFICATIONTYPE.SHIPPING_ORDER,
         r_order: tempFoundOrder._id
       }, session)
@@ -90,7 +89,7 @@ async function updateStatus(orderDTO, session) {
     else if (ORDERSTATUS.SHIPPING === tempFoundOrder.status && orderDTO.status === ORDERSTATUS.SUCCESS) {
       updatedOrder = await orderRepo.updateStatus(orderDTO,session)
       await notificationRepo.create({
-        content: NOTIFICATIONCONTENT.SUCCESS_ORDER,
+        
         type: NOTIFICATIONTYPE.SUCCESS_ORDER,
         r_order: tempFoundOrder._id
       }, session)

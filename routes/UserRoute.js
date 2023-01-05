@@ -35,7 +35,22 @@ router
       const userDTO = loginUserDto(req.body);
       if (userDTO.hasOwnProperty("errMessage"))
         throw new CustomError(userDTO.errMessage, 400);
-      const token = await userService.login(userDTO.data);
+      const token = await userService.login(isAdminSide = false ,userDTO.data);
+      res.status(200).json(token);
+    } catch (error) {
+      if (error instanceof CustomError)
+        res.status(error.code).json({ message: error.message });
+      else res.status(500).json({ message: "Server has something wrong!!" });
+      console.error(error.toString());
+    }
+  })
+
+  .post("/login/admin", async (req, res) => {
+    try {
+      const userDTO = loginUserDto(req.body);
+      if (userDTO.hasOwnProperty("errMessage"))
+        throw new CustomError(userDTO.errMessage, 400);
+      const token = await userService.login(isAdminSide = true,userDTO.data);
       res.status(200).json(token);
     } catch (error) {
       if (error instanceof CustomError)
@@ -92,7 +107,7 @@ router
         const userDTO = updateNewPasswordDto(req.body)
         if (userDTO.hasOwnProperty("errMessage"))
             throw new CustomError(userDTO.errMessage, 400)
-        const updatedUser = await userService.updateNewPassword({...userDTO.data},session)
+        await userService.updateNewPassword({...userDTO.data},session)
         await session.commitTransaction()
         return res.status(201).json({message: "cập nhật mật khẩu thành công"})
     } catch (error) {
