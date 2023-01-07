@@ -2,6 +2,7 @@ const { Router } = require("express");
 const { default: mongoose } = require("mongoose");
 const { updateNotificationDto } = require("../dtos/NotificationDTO");
 const { CustomError } = require("../errors/CustomError");
+const {verifyToken} = require("../middlewares/Auth")
 const router = Router({ mergeParams: true });
 
 const notificationService = require("../services/NotificationService");
@@ -31,6 +32,14 @@ router
     .get("/admin", async (req, res) => {
         try {
             const foundNotifications = await notificationService.getAllForAdmin()
+            return res.status(200).json(foundNotifications);
+        } catch (error) {
+            return res.status(500).json(error.toString());
+        }
+    })
+    .get("/", verifyToken,  async (req, res) => {
+        try {
+            const foundNotifications = await notificationService.getAllForCustomer(req.user.id)
             return res.status(200).json(foundNotifications);
         } catch (error) {
             return res.status(500).json(error.toString());

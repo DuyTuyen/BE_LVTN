@@ -46,7 +46,7 @@ async function register(userDTO,session) {
 }
 
 function update(userDTO,session) {
-    return userRepo.update(userDTO,session)
+    return userRepo.updateOne(userDTO,session)
 }
 
 async function updateNewPassword(userDTO, session){

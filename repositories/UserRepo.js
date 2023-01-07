@@ -99,25 +99,20 @@ const deleteOne = (id, session) => {
   return user.findOneAndUpdate({ _id: id }, { active: false }.session(session));
 };
 
-const updateOne = ({ id, name, avatar, phone, address, email }, session) => {
+const updateOne = ({ id, name, phone, address, email }, session) => {
   return user.findOneAndUpdate(
     { _id: id },
-    { name, avatar, phone, address, email, updatedAt: new Date() },
-    { new: true }.populate([
-      {
-        path: "r_role",
-        select: "_id title"
-      },
-      {
-        path: "r_permissions",
-        select: "_id type"
-      }
-    ]).session(session)
-  );
+    { name, phone, address, email, updatedAt: Date.now() },
+    { new: true }
+  ).session(session);
 };
 
 const updatePassword = ({id, password},session) =>{
   return user.findOneAndUpdate({_id: id},{password, updatedAt: new Date()}, {new:true}).session(session)
+}
+
+const getById = (id) => {
+  return user.findOne({_id:id, active:true}).select("_id name email phone address")
 }
 
 module.exports = {
@@ -129,5 +124,6 @@ module.exports = {
   getAll,
   deleteOne,
   updateOne,
+  getById,
   updatePassword
 };

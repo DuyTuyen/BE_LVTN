@@ -11,13 +11,16 @@ function createUserDto(reqBody) {
   const errMessages = []
 
   if (validateString(input.username))
-    return { errMessage: "usernem không hợp lệ" };
-  if (validateString(input.password)) return { errMessage: "Password invalid" };
-  if (validatePhone(input.phone)) return { errMessage: "Phone invalid" };
-  if (validateEmail(input.email)) return { errMessage: "Email invalid" };
-  if (validateString(input.address)) return { errMessage: "Address invalid" };
-  if (validateObjectId(input.role))
-    errMessages.push("trường 'role' chưa hợp lệ");
+    errMessages.push("trường username chưa hợp lệ")
+  if (validateString(input.password))
+    errMessages.push("trường password chưa hợp lệ");
+  if (validatePhone(input.phone))
+    errMessages.push("trường phone chưa hợp lệ")
+  if (validateEmail(input.email))
+    errMessages.push("trường email chưa hợp lệ")
+  if (validateString(input.address))
+    errMessages.push("trường address chưa hợp lệ")
+  
   if (input.r_permissions !== undefined && validateArray(input.r_permissions)) {
     input.r_permissions.forEach((p, index) => {
       errMessages.push(`trường permission tại index ${index} chưa hợp lệ`);
@@ -25,7 +28,7 @@ function createUserDto(reqBody) {
   }
 
   if (errMessages.length > 0)
-    return { errMessage: errMessages.reduce((total, err) => `${total} ${err} ---`, "")};
+    return { errMessage: errMessages.reduce((total, err) => `${total} ${err} ---`, "") };
   return {
     data: {
       username: input.username,
@@ -41,20 +44,26 @@ function createUserDto(reqBody) {
 }
 function updateUserDTO(reqBody) {
   const input = reqBody;
+  const errMessages = []
 
-  if (validateString(input.address)) return { errMessage: "Address invalid  " };
-  if (validateString(input.name)) return { errMessage: "Name invalid  " };
+  if (validateString(input.name))
+    errMessages.push("trường name chưa hợp lệ")
   if (validatePhone(input.phone))
-    return { errMessage: "Phone number invalid  " };
-  if (validateEmail(input.email)) return { errMessage: "Email invalid  " };
+    errMessages.push("trường username chưa hợp lệ")
+  if (validateEmail(input.email))
+    errMessages.push("trường username chưa hợp lệ")
+  if (validateString(input.address))
+    errMessages.push("trường username chưa hợp lệ")
 
+  if (errMessages.length > 0)
+    return { errMessage: errMessages.reduce((total, err) => `${total} ${err} ---`, "") }
+  
   return {
     data: {
       name: input.name,
       phone: input.phone,
       address: input.address,
       email: input.email,
-
     },
   };
 }
