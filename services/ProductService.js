@@ -1,11 +1,11 @@
 const productRepo = require("../repositories/ProductRepo");
 
-function getAll(filter) {
-  return productRepo.getAll(false,filter);
+function getAll(filter, paginationOptions) {
+  return productRepo.getAll(false,filter,paginationOptions);
 }
 
-function getAllAdminSide(filter) {
-  return productRepo.getAll(true,filter);
+function getAllAdminSide(filter,paginationOptions) {
+  return productRepo.getAll(true,filter,paginationOptions);
 }
 
 function getProductById(id) {

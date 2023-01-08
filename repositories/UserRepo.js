@@ -31,7 +31,7 @@ const create = async (
   ]).session(session)
 };
 const getAll = () => {
-  return user.find({ active: true }).populate([
+  return user.find({}).populate([
     {
       path: "r_role",
       select: "_id title"
@@ -42,6 +42,7 @@ const getAll = () => {
     }
   ]);
 };
+
 const getAllInActive = () => {
   return user.find({ active: false }).populate([
     {
@@ -68,13 +69,10 @@ const getByUsername = (username) => {
 };
 
 const getByUsernameAdmin = (username) => {
-  return user.findOne({ username}).populate([
+  return user.findOne({ username, "r_role.title": "admin"}).populate([
     {
       path: "r_role",
       select: "_id title",
-      match: {
-        title: ROLE.ADMIN
-      }
     },
     {
       path: "r_permissions",

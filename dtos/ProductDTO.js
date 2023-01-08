@@ -133,7 +133,6 @@ function productFilterDto(filter) {
         break
     }
   })
-  console.log(myFilter)
   return myFilter
 }
 

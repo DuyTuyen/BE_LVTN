@@ -35,13 +35,12 @@ const deleteOne = async (id, session) => {
     .session(session)
 };
 
-const getAll = (isAdminSide, filter) => {
+const getAll = (isAdminSide, filter, paginationOptions) => {
   if (isAdminSide) {
-    const myAggregate = GetProductAdminAggregate(filter)
-    return product.aggregate(myAggregate)
+   return product.aggregate(GetProductAdminAggregate(filter))
   } else {
-    const myAggregate = GetProductAggregate(filter)
-    return product.aggregate(myAggregate)
+    const myAggregate = product.aggregate(GetProductAggregate(filter))
+    return product.aggregatePaginate(myAggregate, paginationOptions)
   }
 };
 

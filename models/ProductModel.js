@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const abstractModel = require("./AbstractModel");
+const mongoosePaginate = require('mongoose-paginate-v2');
+const mongooseArregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 const productSchema = new mongoose.Schema({
   ...abstractModel,
@@ -30,6 +32,9 @@ const productSchema = new mongoose.Schema({
     ref: "brand",
   },
 });
+
+productSchema.plugin(mongoosePaginate);
+productSchema.plugin(mongooseArregatePaginate)
 
 const product = mongoose.model("product", productSchema);
 

@@ -5,9 +5,9 @@ const { createBrandDto, updateBrandDto } = require("../dtos/BrandDTO");
 const { CustomError } = require("../errors/CustomError");
 const { default: mongoose } = require("mongoose");
 const { uploadFile } = require("../middlewares/UploadFile");
-
+const {verifyToken, verifyByRole} =  require("../middlewares/Auth")
 router
-  .post("/", uploadFile, async (req, res) => {
+  .post("/", uploadFile, verifyToken, verifyByRole(["admin"]),async (req, res) => {
     const session = await mongoose.startSession()
     session.startTransaction()
 

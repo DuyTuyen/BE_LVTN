@@ -156,5 +156,17 @@ router
       return res.status(500).json(error.toString())
     }
   })
+  .get("/all", async (req, res) => {
+    try {
+      const foundUsers = await userService.getAll()
+
+      return res.status(200).json(foundUsers)
+    } catch (error) {
+      console.log(error)
+      if (error instanceof CustomError)
+        res.status(error.code).json({ message: error.message })
+      return res.status(500).json(error.toString())
+    }
+  })
 
 module.exports = { router };

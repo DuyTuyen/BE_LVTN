@@ -1,9 +1,11 @@
 const { CustomError } = require("../errors/CustomError");
 const userRepo = require("../repositories/UserRepo");
+const roleRepo = require("../repositories/RoleRepo")
 const { signToken } = require("../utils/SignToken");
 const bcrypt = require("bcrypt");
 const forgotPasswordRepo = require("../repositories/ForgotPasswordRepo")
-const FORGOTPASSWORDSTATUS = require("../enums/ForgotPasswordStatus")
+const FORGOTPASSWORDSTATUS = require("../enums/ForgotPasswordStatus");
+const Role = require("../enums/Role");
 
 function getAll() { 
   return userRepo.getAll();
@@ -27,7 +29,6 @@ async function login(isAdminSide, userDTO) {
     foundUser = await userRepo.getByUsername(userDTO.username);
   else 
     foundUser = await userRepo.getByUsernameAdmin(userDTO.username)
-  console.log(isAdminSide, userDTO)
   if (!foundUser) throw new CustomError("user không tồn tại", 400);
   const isSamePassword = await bcrypt.compareSync(
     userDTO.password,
@@ -40,8 +41,9 @@ async function login(isAdminSide, userDTO) {
 }
 
 async function register(userDTO,session) {
+  const foundRole = await roleRepo.getByTitle(Role.CUSTOMER)
   const hashPassword = await bcrypt.hashSync(userDTO.password, 10);
-  const createdUser =  await userRepo.create({...userDTO, password: hashPassword},session);
+  const createdUser =  await userRepo.create({...userDTO, password: hashPassword, r_role: foundRole},session);
   return Promise.resolve(signToken(createdUser));
 }
 

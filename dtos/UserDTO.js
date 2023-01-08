@@ -12,6 +12,8 @@ function createUserDto(reqBody) {
 
   if (validateString(input.username))
     errMessages.push("trường username chưa hợp lệ")
+  if (validateString(input.name))
+    errMessages.push("trường name chưa hợp lệ")
   if (validateString(input.password))
     errMessages.push("trường password chưa hợp lệ");
   if (validatePhone(input.phone))
@@ -20,7 +22,7 @@ function createUserDto(reqBody) {
     errMessages.push("trường email chưa hợp lệ")
   if (validateString(input.address))
     errMessages.push("trường address chưa hợp lệ")
-  
+
   if (input.r_permissions !== undefined && validateArray(input.r_permissions)) {
     input.r_permissions.forEach((p, index) => {
       errMessages.push(`trường permission tại index ${index} chưa hợp lệ`);
@@ -37,9 +39,7 @@ function createUserDto(reqBody) {
       phone: input.phone,
       address: input.address,
       email: input.email,
-      r_role: input.role,
-      r_permissions: input.r_permissions
-    },
+    }
   };
 }
 function updateUserDTO(reqBody) {
@@ -57,7 +57,7 @@ function updateUserDTO(reqBody) {
 
   if (errMessages.length > 0)
     return { errMessage: errMessages.reduce((total, err) => `${total} ${err} ---`, "") }
-  
+
   return {
     data: {
       name: input.name,

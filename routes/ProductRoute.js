@@ -6,6 +6,7 @@ const { CustomError } = require("../errors/CustomError");
 
 
 const { default: mongoose } = require("mongoose");
+const getPaginationOptions = require("../utils/Pagination");
 
 router
   .post("/", async (req, res) => {
@@ -85,8 +86,9 @@ router
 
   .get("/", async (req, res) => {
     try {
+      const paginationOptions = getPaginationOptions(req)
       const filter = productFilterDto(req.query)
-      const products = await productService.getAll(filter);
+      const products = await productService.getAll(filter,paginationOptions);
       return res.status(200).json(products);
     } catch (error) {
       console.log(error)
@@ -96,8 +98,9 @@ router
 
   .get("/admin", async (req, res) => {
     try {
+      const paginationOptions = getPaginationOptions(req)
       const filter = productFilterDto(req.query)
-      const products = await productService.getAllAdminSide(filter);
+      const products = await productService.getAllAdminSide(filter,paginationOptions);
       return res.status(200).json(products);
     } catch (error) {
       console.log(error)
