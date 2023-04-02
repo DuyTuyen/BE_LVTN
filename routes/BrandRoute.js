@@ -5,9 +5,10 @@ const { createBrandDto, updateBrandDto } = require("../dtos/BrandDTO");
 const { CustomError } = require("../errors/CustomError");
 const { default: mongoose } = require("mongoose");
 const { uploadFile } = require("../middlewares/UploadFile");
-const {verifyToken, verifyByRole} =  require("../middlewares/Auth")
+const {verifyToken, verifyByRole} =  require("../middlewares/Auth");
+const { deleteCategoryDto } = require("../dtos/CategoryDTO");
 router
-  .post("/", uploadFile, verifyToken, verifyByRole(["admin"]),async (req, res) => {
+  .post("/", uploadFile,async (req, res) => {
     const session = await mongoose.startSession()
     session.startTransaction()
 
@@ -71,14 +72,27 @@ router
       res.status(500).json({ message: "Server has something wrong!!" })
     }
   })
-  .delete('/:id', (req, res) => {
-    brandService.deleteOne(req.params.id)
-      .then(category => {
-        return res.status(200).json(category);
-      })
-      .catch(err => {
-        res.status(400).json({ message: err })
-      })
+  .delete('/:id', async (req, res) => {
+    const session = await mongoose.startSession()
+    session.startTransaction()
+    try {
+  
+      const brandDTO = deleteCategoryDto(req.params.id)
+      if (brandDTO.hasOwnProperty("errMessage"))
+        throw new CustomError(brandDTO.errMessage, 400)
+      const deletedBrand = await brandService.deleteOne(brandDTO.data.id , session)
+      await session.commitTransaction()
+      res.status(201).json(deletedBrand);
+
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+
+      if (error instanceof CustomError)
+        res.status(error.code).json({ message: error.message })
+      else
+        res.status(500).json({message:"Server has something wrong!!"})
+    }
   })
 
 

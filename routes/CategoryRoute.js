@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router({ mergeParams: true });
 const categoryService = require("../services/CategoryService");
-const { createCategoryDto } = require("../dtos/CategoryDTO");
+const { createCategoryDto, deleteCategoryDto, updateCategoryDto } = require("../dtos/CategoryDTO");
 const { CustomError } = require("../errors/CustomError");
 const { default: mongoose } = require("mongoose");
 const { uploadFile } = require("../middlewares/UploadFile")

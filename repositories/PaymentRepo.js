@@ -18,4 +18,14 @@ const updateStatus = ({ id, momoId, status }, session) => {
     .session(session);
 };
 
-module.exports = { create, getAll, updateStatus };
+const updateStatusByOrderId = ({ orderId, status }, session) => {
+  return payment
+    .findOneAndUpdate(
+      { r_order: orderId },
+      { status, updatedAt: new Date() },
+      { new: true }
+    )
+    .session(session);
+};
+
+module.exports = { create, getAll, updateStatus, updateStatusByOrderId };

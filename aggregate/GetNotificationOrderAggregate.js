@@ -3,14 +3,6 @@ const NOTIFICATIONTYPE = require("../enums/NotificationType")
 module.exports = (userId) => {
     const aggregate = [
         {
-            $match: {
-                active: true,
-                type: {
-                    $in: [NOTIFICATIONTYPE.FAILED_ORDER, NOTIFICATIONTYPE.SHIPPING_ORDER, NOTIFICATIONTYPE.SUCCESS_ORDER]
-                }
-            }
-        },
-        {
             $lookup: {
                 from: "orders",
                 localField: "r_order",
@@ -87,6 +79,10 @@ module.exports = (userId) => {
         },
         {
             $match: {
+                active: true,
+                type: {
+                    $in: [NOTIFICATIONTYPE.FAILED_ORDER, NOTIFICATIONTYPE.SHIPPING_ORDER, NOTIFICATIONTYPE.SUCCESS_ORDER]
+                },
                 "r_order.r_user._id": mongoose.Types.ObjectId(userId)
             }
         },

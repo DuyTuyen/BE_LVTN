@@ -27,6 +27,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     require: true,
+    unique:true
   },
   r_role: {
     type: mongoose.Schema.Types.ObjectId,

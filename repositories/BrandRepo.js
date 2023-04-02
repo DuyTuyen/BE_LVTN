@@ -17,10 +17,9 @@ const getByName = (name) => {
 };
 
 const deleteOne = (id, session) => {
-  return brand.findOneAndUpdate(
-    { _id: id },
-    { active: false }.session(session)
-  );
+  return brand
+    .findOneAndUpdate({ _id: id}, { active: false })
+    .session(session);
 };
 
 const updateOne = ({ id, name ,img}, session) => {

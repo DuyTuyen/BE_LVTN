@@ -69,16 +69,18 @@ const getByUsername = (username) => {
 };
 
 const getByUsernameAdmin = (username) => {
-  return user.findOne({ username, "r_role.title": "admin"}).populate([
-    {
-      path: "r_role",
-      select: "_id title",
-    },
-    {
-      path: "r_permissions",
-      select: "_id type"
-    }
-  ]);
+  return user
+    .findOne({ username, r_role: "63b43b10d2b4fb76095181d5" })
+    .populate([
+      {
+        path: "r_role",
+        select: "_id title",
+      },
+      {
+        path: "r_permissions",
+        select: "_id type",
+      },
+    ]);
 };
 
 const getByEmail = (email) => {

@@ -16,6 +16,8 @@ router
         session.startTransaction();
         try {
             const notificationMoMoDTO = notificationMoMoDto(req.body)
+            console.log("momo noti")
+            console.log(req.body)
             if (notificationMoMoDTO.hasOwnProperty("errMessage"))
                 throw new CustomError(notificationMoMoDTO.errMessage, 400)
             //before sign HMAC SHA256 with format

@@ -87,4 +87,21 @@ function updateOrderDto(reqBody) {
   };
 }
 
-module.exports = { createOrderDto, updateOrderDto };
+function updatePaymentStatusDto(id) {
+  const errMessages = [];
+
+  if (validateObjectId(id)) errMessages.push("trường 'id' không hợp lệ");
+
+  if (errMessages.length > 0)
+    return {
+      errMessage: errMessages.reduce((total, err) => `${total} ${err}---`, ""),
+    };
+
+  return {
+    data: {
+      id
+    },
+  };
+}
+
+module.exports = { createOrderDto, updateOrderDto, updatePaymentStatusDto };
